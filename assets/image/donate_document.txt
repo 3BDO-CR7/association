@@ -1,0 +1,10 @@
+ 
+
+fonts >> fairuz
+
+colors >>
+green       >> #006633
+light green >>#9BB200
+black       >> #2C2C2C
+bold gray   >>#959595
+light gray  >>#B5B5B5
