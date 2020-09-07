@@ -1,23 +1,26 @@
-const INITIAL_STATE = { about : '', terms : '' , phone : '', email : '' , address : ''  ,loader : false };
+const INITIAL_STATE = { about : '', terms : '', data : [] , notifications : [], loader : false };
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case 'aboutUs':
             return {
-                about       : action.payload.data,
-                loader      : action.payload.success
+                about                   : action.payload.data.about,
+                loader                  : action.payload.success
             };
         case 'termsCondition':
             return {
-                terms       : action.payload.data,
-                loader      : action.payload.success
+                terms                   : action.payload.data.terms,
+                loader                  : action.payload.success
             };
-        case 'siteHelp':
+        case 'allQuestions':
             return {
-                phone       : action.payload.data,
-                email       : action.payload.email,
-                address     : action.payload.address,
-                loader      : action.payload.success
+                data                    : action.payload.data,
+                loader                  : action.payload.success
+            };
+        case 'allNotifications':
+            return {
+                notifications           : action.payload.data,
+                loader                  : action.payload.success
             };
         default:
             return state;

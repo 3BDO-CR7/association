@@ -1,22 +1,23 @@
 import React, { useState , useEffect } from "react";
-import {View, Text, Image} from "react-native";
+import {View, Text, Image, TouchableOpacity, I18nManager, Dimensions} from "react-native";
 import {Container, Content, Header, Button, Left, Body, Title} from 'native-base'
 import styles from '../../assets/style';
 import i18n from "../../locale/i18n";
-import * as Animatable from 'react-native-animatable';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { allNotifications } from '../actions';
+import { allQuestions } from '../actions';
+import * as Animatable from "react-native-animatable";
 
-function Notification({navigation}) {
+
+
+function Questions({navigation}) {
 
     const lang                          = useSelector(state => state.lang.lang);
-    const [deviceId, setDeviceId]       = useState(1);
-    const notifications                 = useSelector(state => state.article.notifications ? state.article.notifications : []);
+    const questions                     = useSelector(state => state.article.data ? state.article.data : []);
     const dispatch                      = useDispatch();
 
     function fetchData(){
-        dispatch(allNotifications(lang, deviceId));
+        dispatch(allQuestions(lang));
     }
 
     useEffect(() => {
@@ -42,7 +43,7 @@ function Notification({navigation}) {
                 </Left>
                 <Body style={[ styles.SelfLeft]}>
                     <Title style={[styles.FairuzBold , styles.text_black, styles.textSize_18, { top : 3 }]}>
-                        { i18n.t('notificatio') }
+                        { i18n.t('FAQs') }
                     </Title>
                 </Body>
             </Header>
@@ -58,38 +59,28 @@ function Notification({navigation}) {
                 </View>
 
                 <View style={[ styles.Width_100, styles.paddingHorizontal_10 ]}>
-
                     {
-                        notifications.map((noty) => {
+                        questions.map((quest) => {
                                 return (
-                                    <View style={[ styles.Width_100, styles.overHidden ]}>
-                                        <Animatable.View animation="fadeInUp" easing="ease-out" delay={500} style={[styles.Width_100]}>
-                                            <View style={[ styles.paddingVertical_15 ,styles.bg_White, styles.Radius_10, styles.paddingHorizontal_10, styles.marginVertical_10, styles.border_green, { borderLeftWidth : 7 } ]}>
-                                                <View style={[ styles.rowGroup ]}>
-                                                    <Text style={[ styles.textSize_16, styles.FairuzBold, styles.text_black, styles.textDir ]}>
-                                                        { noty.title }
-                                                    </Text>
-                                                    <Text style={[ styles.textSize_16, styles.FairuzNormal, styles.text_bold_gray, styles.textDir ]}>
-                                                        { noty.date }
-                                                    </Text>
-                                                </View>
-                                                <Text style={[ styles.textSize_16, styles.FairuzNormal, styles.text_bold_gray, styles.textDir ]}>
-                                                    { noty.body }
-                                                </Text>
-                                            </View>
-                                        </Animatable.View>
+                                    <View style={[ styles.overHidden, styles.flex_50, styles.paddingHorizontal_5 ]}>
+                                        <View style={[ styles.bg_White, styles.Radius_10, styles.paddingVertical_10, styles.paddingHorizontal_10, styles.marginVertical_10, styles.Border, styles.border_dash ]}>
+                                            <Text style={[ styles.textSize_16, styles.FairuzNormal, styles.text_green, styles.textDir ]}>{ quest.question }</Text>
+                                        </View>
+                                        <View style={[ styles.paddingHorizontal_20 ]}>
+                                            <Text style={[ styles.textSize_16, styles.FairuzNormal, styles.text_bold_gray, styles.textDir ]}>
+                                                { quest.answer }
+                                            </Text>
+                                        </View>
                                     </View>
                                 )
                             }
                         )
                     }
-
                 </View>
 
             </Content>
         </Container>
-
     );
 }
 
-export default Notification;
+export default Questions;

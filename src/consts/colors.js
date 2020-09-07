@@ -3,7 +3,7 @@ export default {
     bold_gray           : '#959595',
     black               : '#2C2C2C',
     wight               : '#fafafa',
-    dash                : '#DDD',
+    dash                : '#f1f1f1',
     purple              : '#000203',
     orange              : '#F99F2F',
     red                 : '#EF3434',

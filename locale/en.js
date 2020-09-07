@@ -20,6 +20,10 @@ const en = {
     'FAQs'                      : 'FAQs',
     'terms'                     : 'Terms and conditions',
     'head'                      : 'national producer captors association',
+    'cam'                       : 'camera',
+    'gall'                      : 'photo gallery',
+    'choose'                    : 'choose',
+
 };
 
 export default en;

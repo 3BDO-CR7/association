@@ -429,6 +429,9 @@ const styles = ({
     overlay_black : {
         backgroundColor                 : "rgba(0, 0, 0, 0.3)"
     },
+    bg_trans : {
+        backgroundColor                 : "transparent"
+    },
 
     // Style Border
 
@@ -491,7 +494,7 @@ const styles = ({
 
     boxShadow : {
         shadowColor             : "#959595",
-        shadowOffset            : { width: 0, height: 1},
+        shadowOffset            : { width: 1, height: 1},
         shadowOpacity           : 0.20,
         shadowRadius            : 2.3,
         elevation               : 0.5,
@@ -539,7 +542,7 @@ const styles = ({
         flexDirection       : "row",
         justifyContent      : "space-between",
         alignItems          : "center",
-        flexWrap            : 'wrap'
+        flexWrap            : 'wrap',
     },
     rowSpace : {
         flexDirection       : "row",
@@ -953,7 +956,7 @@ const styles = ({
     },
     Active : {
         borderWidth           : 1,
-        borderColor           : COLORS.purple,
+        borderColor           : COLORS.green,
     },
     noActive : {
         borderWidth           : 1,
@@ -1035,13 +1038,13 @@ const styles = ({
     // For App
 
     inAct : {
-        backgroundColor         : "#FFF",
+        backgroundColor         : '#e5efea',
         paddingVertical         : 5,
         paddingHorizontal       : 10,
         zIndex                  : 999
     },
     unAct : {
-        backgroundColor         : "#FFF",
+        backgroundColor         : null,
         paddingVertical         : 5,
         paddingHorizontal       : 10,
     },
