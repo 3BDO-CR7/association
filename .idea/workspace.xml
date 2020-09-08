@@ -2,24 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e900b4f1-0a40-4574-a091-58f30bc24a30" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/actions/AddOrderAction.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/reducers/AddOrderReducer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/style/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/style/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/locale/ar.js" beforeDir="false" afterPath="$PROJECT_DIR$/locale/ar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/locale/en.js" beforeDir="false" afterPath="$PROJECT_DIR$/locale/en.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/actions/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/actions/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/About.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/About.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddLocation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddLocation.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/AddOrder.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddOrder.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Notification.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Notification.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Questions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Questions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Terms.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Terms.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reducers/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/reducers/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/DrawerCustomization.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/DrawerCustomization.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -64,11 +47,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/components/AddOrder.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="452">
-              <caret line="250" column="4" lean-forward="true" selection-start-line="250" selection-start-column="4" selection-end-line="257" selection-end-column="6" />
+            <state relative-caret-position="110">
+              <caret line="285" lean-forward="true" selection-start-line="285" selection-end-line="285" />
               <folding>
                 <element signature="e#0#52#0" expanded="true" />
                 <element signature="n#!!block;n#fetchData#0;n#!!block;n#AddOrder#0" />
@@ -84,7 +67,8 @@
                 <element signature="e#5988#6136#0" />
                 <element signature="n#!!block;n#toggleModal#0;n#!!block;n#AddOrder#0" />
                 <element signature="n#!!block;n#selectId#0;n#!!block;n#AddOrder#0" />
-                <element signature="e#7710#8538#0" />
+                <element signature="n#!!block;n#deleteImg#0;n#!!block;n#AddOrder#0" />
+                <element signature="e#11035#11394#0" />
                 <element signature="e#16948#20134#0" />
               </folding>
             </state>
@@ -92,22 +76,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/node_modules/expo-multiple-media-imagepicker/src/ImageBrowser.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1071">
-              <caret line="51" column="82" selection-start-line="51" selection-start-column="82" selection-end-line="51" selection-end-column="82" />
-              <folding>
-                <element signature="e#0#25#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/actions/AddOrderAction.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="343">
-              <caret line="26" column="64" selection-start-line="26" selection-start-column="64" selection-end-line="26" selection-end-column="64" />
+              <caret line="26" column="48" lean-forward="true" selection-start-line="26" selection-start-column="48" selection-end-line="26" selection-end-column="48" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -128,7 +100,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>hasLocationPermissions</find>
       <find>locationResult</find>
       <find>initMap</find>
       <find>mapRegion</find>
@@ -158,6 +129,7 @@
       <find>RNCCameraRoll</find>
       <find>CameraRoll</find>
       <find>getAlbums</find>
+      <find>data</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -190,14 +162,14 @@
         <option value="$PROJECT_DIR$/locale/en.js" />
         <option value="$PROJECT_DIR$/assets/style/index.js" />
         <option value="$PROJECT_DIR$/node_modules/expo-multiple-media-imagepicker/src/ImageBrowser.js" />
-        <option value="$PROJECT_DIR$/src/components/AddOrder.js" />
         <option value="$PROJECT_DIR$/src/actions/AddOrderAction.js" />
+        <option value="$PROJECT_DIR$/src/components/AddOrder.js" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="1">
     <option name="y" value="23" />
-    <option name="width" value="1089" />
+    <option name="width" value="1440" />
     <option name="height" value="809" />
   </component>
   <component name="ProjectView">
@@ -269,18 +241,18 @@
       <updated>1599389721221</updated>
       <workItem from="1599389722676" duration="7425000" />
       <workItem from="1599461392296" duration="26515000" />
-      <workItem from="1599551607583" duration="17908000" />
+      <workItem from="1599551607583" duration="19383000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="51848000" />
+    <option name="totallyTimeSpent" value="53323000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1089" height="809" extended-state="0" />
+    <frame x="0" y="23" width="1440" height="809" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2712512" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20314735" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -629,10 +601,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/actions/AddOrderAction.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="343">
+          <caret line="26" column="48" lean-forward="true" selection-start-line="26" selection-start-column="48" selection-end-line="26" selection-end-column="48" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/expo-multiple-media-imagepicker/src/ImageBrowser.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="293">
+          <caret line="50" column="23" lean-forward="true" selection-start-line="50" selection-start-column="23" selection-end-line="50" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/AddOrder.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="452">
-          <caret line="250" column="4" lean-forward="true" selection-start-line="250" selection-start-column="4" selection-end-line="257" selection-end-column="6" />
+        <state relative-caret-position="110">
+          <caret line="285" lean-forward="true" selection-start-line="285" selection-end-line="285" />
           <folding>
             <element signature="e#0#52#0" expanded="true" />
             <element signature="n#!!block;n#fetchData#0;n#!!block;n#AddOrder#0" />
@@ -648,28 +640,9 @@
             <element signature="e#5988#6136#0" />
             <element signature="n#!!block;n#toggleModal#0;n#!!block;n#AddOrder#0" />
             <element signature="n#!!block;n#selectId#0;n#!!block;n#AddOrder#0" />
-            <element signature="e#7710#8538#0" />
+            <element signature="n#!!block;n#deleteImg#0;n#!!block;n#AddOrder#0" />
+            <element signature="e#11035#11394#0" />
             <element signature="e#16948#20134#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/expo-multiple-media-imagepicker/src/ImageBrowser.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1071">
-          <caret line="51" column="82" selection-start-line="51" selection-start-column="82" selection-end-line="51" selection-end-column="82" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/actions/AddOrderAction.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="343">
-          <caret line="26" column="64" selection-start-line="26" selection-start-column="64" selection-end-line="26" selection-end-column="64" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>

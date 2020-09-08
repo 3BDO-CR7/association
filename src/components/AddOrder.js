@@ -249,12 +249,8 @@ function AddOrder({navigation, route}) {
     }
 
     const getPermissionAsync = async () => {
-        await Camera.requestPermissionsAsync();
         await Permissions.askAsync(Permissions.CAMERA);
-        const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-        if (status !== 'granted') {
-            alert('Sorry, we need camera roll permissions to make this work!');
-        }
+        await Permissions.askAsync(Permissions.CAMERA_ROLL);
     };
 
     const uploadImages = async (i) => {
