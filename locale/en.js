@@ -23,6 +23,9 @@ const en = {
     'cam'                       : 'camera',
     'gall'                      : 'photo gallery',
     'choose'                    : 'choose',
+    '_newNotification'          : 'there is a new notification',
+    'newNotification'           : 'new notification',
+    'wait'                      : 'please wait a little',
 
 };
 

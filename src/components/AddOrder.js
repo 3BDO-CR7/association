@@ -1,5 +1,15 @@
 import React, { useState , useEffect } from "react";
-import {View, Text, Image, TouchableOpacity, Animated, KeyboardAvoidingView, ScrollView} from "react-native";
+import {
+    View,
+    Text,
+    Image,
+    TouchableOpacity,
+    Animated,
+    KeyboardAvoidingView,
+    ScrollView,
+    AsyncStorage,
+    ActivityIndicator
+} from "react-native";
 import {Container, Content, Header, Button, Left, Body, Title, Toast, Form, Item, Input, Icon, CheckBox} from 'native-base'
 import styles from '../../assets/style';
 import i18n from "../../locale/i18n";
@@ -9,13 +19,20 @@ import Modal from "react-native-modal";
 import {CameraBrowser} from 'expo-multiple-imagepicker';
 import { ImageBrowser } from 'expo-multiple-media-imagepicker';
 import * as ImagePicker from 'expo-image-picker';
-import { getBlogs } from '../actions';
-
+import { getBlogs, addOrder } from '../actions';
+import * as Permissions from "expo-permissions";
+import {Notifications} from "expo";
 
 function AddOrder({navigation, route}) {
 
     const lang                                          = useSelector(state => state.lang.lang);
     const [blogId , setBlogId]                          = useState(route.params.blog_id);
+    const [lat , setLat]                                = useState(route.params.mapRegion.latitude);
+    const [lng , setLng]                                = useState(route.params.mapRegion.longitude);
+    const [cityName , setCityName]                      = useState(route.params.cityName);
+    const [loaded, setLoaded]                           = useState(false);
+    const [deviceId, setDeviceId]                       = useState('');
+    const [deviceType, setDeviceType]                   = useState('android');
     const dispatch                                      = useDispatch();
     const blogs                                         = useSelector(state => state.blog.blog);
 
@@ -42,7 +59,7 @@ function AddOrder({navigation, route}) {
     const [imageBrowserOpen, setImageBrowserOpen]       = useState(false);
     const [cameraBrowserOpen, setCameraBrowserOpen]     = useState(false);
 
-    const [Base64, setBase64]                           = useState([]);
+    const [base64, setBase64]                           = useState([]);
     const [images, setImages]                           = useState([]);
     const [base_64, setBase_64]                         = useState([]);
 
@@ -50,6 +67,33 @@ function AddOrder({navigation, route}) {
         dispatch(getBlogs(lang));
         getPermissionAsync();
     }
+
+    const getDeviceId = async () => {
+        const {status: existingStatus} = await Permissions.getAsync(
+            Permissions.NOTIFICATIONS
+        );
+
+        let finalStatus = existingStatus;
+
+        if (existingStatus !== 'granted') {
+            const {status} = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+            finalStatus = status;
+        }
+
+        if (finalStatus !== 'granted') {
+            return;
+        }
+
+        const deviceId = await Notifications.getExpoPushTokenAsync();
+
+        setDeviceId(deviceId);
+
+        AsyncStorage.setItem('deviceID', deviceId);
+    };
+
+    useEffect(() => {
+        getDeviceId()
+    }, []);
 
     useEffect(() => {
         fetchData();
@@ -130,7 +174,22 @@ function AddOrder({navigation, route}) {
 
         if (name.length <= 0) {
             isError     = true;
-            msg         = i18n.t('entername');
+            msg         = i18n.t('namedonor');
+        }else if (phone.length <= 0) {
+            isError     = true;
+            msg         = i18n.t('phone');
+        }else if (date.length <= 0) {
+            isError     = true;
+            msg         = i18n.t('suitedate');
+        }else if (time.length <= 0) {
+            isError     = true;
+            msg         = i18n.t('goodTime');
+        }else if (productId === null) {
+            isError     = true;
+            msg         = i18n.t('product');
+        }else if(images.length <= 0){
+            isError     = true;
+            msg         = i18n.t('prodimage');
         }
         if (msg !== '') {
             Toast.show({
@@ -196,7 +255,6 @@ function AddOrder({navigation, route}) {
         if (status !== 'granted') {
             alert('Sorry, we need camera roll permissions to make this work!');
         }
-
     };
 
     const uploadImages = async (i) => {
@@ -205,13 +263,14 @@ function AddOrder({navigation, route}) {
 
             let result = await ImagePicker.launchCameraAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.All,
-                aspect: [4, 3],
-                quality : .5,
-
+                aspect      : [4, 3],
+                quality     : .5,
+                base64      : true
             });
             if (!result.cancelled) {
-                Base64(Base64.concat(result.uri));
-                Base64_.push(result.base64);
+                setShowModalUpload(!showModalUpload);
+                setBase64(base64.concat(result.uri));
+                setImages(images.concat(result.base64));
                 data.append("images[]",{
                     uri : result.uri,
                     type : 'image/jpeg',
@@ -237,34 +296,56 @@ function AddOrder({navigation, route}) {
                         name    : item.filename || `temp_image_${index}.jpg`
                     });
                 });
-
-                imageBrowserOpen(false);
-                cameraBrowserOpen(false);
-                photos(photos.concat(photos));
-                const imgs = photos;
-                for (let i = 0; i < imgs.length; i++) {
-                    const imageURL = imgs[i].localUri;
-                    FileSystem.readAsStringAsync(imageURL, { encoding: 'base64' }).then(imgBase64 => Base64_.push(imgBase64))
+                setShowModalUpload(!showModalUpload);
+                setImageBrowserOpen(false);
+                setCameraBrowserOpen(false);
+                console.log('images -=-=-=-=-', images);
+                setImages(images.concat(images));
+                const imgs = images;
+                if (imgs.length !== 0){
+                    for (let i = 0; i < imgs.length; i++) {
+                        const imageURL = imgs[i].localUri;
+                        FileSystem.readAsStringAsync(imageURL, { encoding: 'base64' }).then(imgBase64 => setBase_64.push(imgBase64))
+                    }
+                } else {
+                    console.log('no images')
                 }
             }
         ).catch((e) => console.log(e))
     };
 
     function deleteImg(i) {
-        Base64.splice(i, 1);
-        Base64_.splice(i, 1);
-        base_64.splice(i, 1);
-        photos(Base64)
+        base64.splice(i, 1);
+        images.splice(i, 1);
+        setBase64([...base64]);
+        setImages([...images]);
+        console.log('base64 delet', base64.length);
+        console.log('images delet', images.length);
     }
 
     function onSubmit(){
         const err = validate();
 
         if (!err){
-            const data = { lang };
-            dispatch(register(data, navigation));
+            setLoaded(true);
+            const data = { lang, name, phone, date, time, productId, lat, lng, deviceId, images, deviceType };
+            dispatch(addOrder(data, navigation, loaded));
+            console.log('data -=-=-=-=-=-', data)
         }
 
+    }
+
+    function renderLoader(){
+        if (loaded){
+            return(
+                <View style={[styles.position_A , styles.flexCenter, styles.overlay_white_up, styles.right_0, styles.top_0, styles.Width_100, styles.height_full ,{ zIndex : 999 }]}>
+                    <ActivityIndicator animating={true} size="large" color="#006633" />
+                    <Text style={[styles.FairuzBold , styles.text_green, styles.textSize_18, styles.marginTop_25]}>
+                        { i18n.t('wait') }
+                    </Text>
+                </View>
+            );
+        }
     }
 
     if (imageBrowserOpen) {
@@ -272,7 +353,10 @@ function AddOrder({navigation, route}) {
     }
 
     return (
+
         <Container>
+
+            { renderLoader() }
 
             <Header style={[ styles.headerView, styles.bg_off, styles.Width_100, styles.paddingHorizontal_15, styles.rowGroup ]}>
                 <Left style={[ styles.leftIcon,styles.position_R, styles.top_15 ]}>
@@ -292,7 +376,7 @@ function AddOrder({navigation, route}) {
 
             <Content contentContainerStyle={[ styles.bgFullWidth, styles.position_R ]}>
 
-                <View style={[ styles.position_A, styles.top_0, styles.right_0, styles.Width_100, ]}>
+                <View style={[ styles.position_A, styles.right_0, styles.Width_100, { top : -15 } ]}>
                     <Image
                         style={[styles.Width_100, { height : 190 }]}
                         source={require('../../assets/image/bg5.png')}
@@ -316,7 +400,6 @@ function AddOrder({navigation, route}) {
                                         onChangeText={(name) => setName(name)}
                                         onBlur={() => unActiveInput('name')}
                                         onFocus={() => activeInput('name')}
-                                        value={name}
                                     />
                                 </Item>
                             </View>
@@ -330,10 +413,10 @@ function AddOrder({navigation, route}) {
                                 <Item style={[styles.item, styles.position_R]}>
                                     <Input
                                         style={[styles.input, styles.height_60, styles.Radius_15 ,(phoneStatus === 1 ? styles.Active : styles.noActive)]}
-                                        onChangeText={(phone) => setName(phone)}
+                                        onChangeText={(phone) => setPhone(phone)}
                                         onBlur={() => unActiveInput('phone')}
                                         onFocus={() => activeInput('phone')}
-                                        value={phone}
+                                        keyboardType={'number-pad'}
                                     />
                                 </Item>
                             </View>
@@ -460,7 +543,7 @@ function AddOrder({navigation, route}) {
 
                             <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} style={{marginHorizontal: 20}}>
                                 {
-                                    Base64.map((item,i) => {
+                                    base64.map((item,i) => {
                                         return(
                                             <View key={i} style={[ styles.width_70, styles.height_70, styles.marginVertical_10, styles.marginHorizontal_10, styles.Radius_10 ]}>
                                                 <Image
@@ -476,6 +559,14 @@ function AddOrder({navigation, route}) {
                                     })
                                 }
                             </ScrollView>
+
+                            <TouchableOpacity
+                                style={[styles.bg_green, styles.Width_100, styles.flexCenter, styles.marginVertical_15, styles.height_60, styles.Radius_15, styles.marginTop_25]}
+                                onPress={() => onSubmit()}>
+                                <Text style={[styles.FairuzNormal , styles.textSize_16, styles.text_White]}>
+                                    {i18n.t('sent')}
+                                </Text>
+                            </TouchableOpacity>
 
                         </Form>
                     </KeyboardAvoidingView>

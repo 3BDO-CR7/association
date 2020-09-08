@@ -1,10 +1,11 @@
 import React, { useState , useEffect } from "react";
-import {View, Text, Image, TouchableOpacity,ScrollView} from "react-native";
+import {View, Text, Image, TouchableOpacity,ScrollView, AsyncStorage} from "react-native";
 import {Container, Content, Header, Button, Left, Body, Right, Title, Icon} from 'native-base'
 import styles from '../../assets/style';
 import * as Animatable from 'react-native-animatable';
 import i18n from "../../locale/i18n";
-
+import { Notifications } from 'expo'
+import * as Permissions from 'expo-permissions'
 import { useSelector, useDispatch } from 'react-redux';
 import { getBlogs } from '../actions';
 
@@ -13,6 +14,7 @@ function Home({navigation}) {
     const [toggle , setToggle]              = useState(false);
     const lang                              = useSelector(state => state.lang.lang);
     const blog                              = useSelector(state => state.blog.blog);
+    const [deviceId, setDeviceId]           = useState(null);
     const dispatch                          = useDispatch();
 
     function fetchData(){
@@ -28,6 +30,51 @@ function Home({navigation}) {
         return unsubscribe;
     }, [navigation]);
 
+    useEffect(() => {
+        Notifications.addListener(handleNotification);
+        getDeviceID();
+    }, []);
+
+    function handleNotification(notification) {
+        if (notification && notification.origin !== 'received') {
+            navigation.navigate('notification');
+        }
+
+        if (notification.remote) {
+            Vibration.vibrate();
+            const notificationId = Notifications.presentLocalNotificationAsync({
+                title: notification.data.title  ? notification.data.title : i18n.t('newNotification'),
+                body: notification.data.body ? notification.data.body : i18n.t('_newNotification'),
+                ios: { _displayInForeground: true }
+            });
+        }
+    }
+
+    const getDeviceID = async () => {
+        const { status: existingStatus } = await Permissions.getAsync(
+            Permissions.NOTIFICATIONS
+        );
+
+        let finalStatus      = existingStatus;
+
+        if (existingStatus  !== 'granted') {
+            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+            finalStatus      = status;
+        }
+
+        if (finalStatus     !== 'granted') {
+            return;
+        }
+
+        let token            = await Notifications.getExpoPushTokenAsync();
+        setDeviceId(token);
+        // console.log('token =====', token)
+        AsyncStorage.setItem('deviceID', token);
+
+        if (finalStatus === 'granted') {
+            Notifications.addListener(handleNotification);
+        }
+    };
 
     return (
         <Container>
@@ -50,7 +97,7 @@ function Home({navigation}) {
 
             <Content contentContainerStyle={[ styles.bgFullWidth, styles.position_R ]}>
 
-                <View style={[ styles.position_A, styles.top_0, styles.right_0, styles.Width_100, ]}>
+                <View style={[ styles.position_A, styles.right_0, styles.Width_100, { top : -15 } ]}>
                     <Image
                         style={[styles.Width_100, { height : 190 }]}
                         source={require('../../assets/image/bg5.png')}
@@ -64,7 +111,7 @@ function Home({navigation}) {
                                 return (
                                     <View style={[ styles.overHidden, styles.flex_50, styles.paddingHorizontal_5 ]}>
                                         <Animatable.View animation="fadeInRight" easing="ease-out" delay={500} style={[styles.Width_100]}>
-                                            <TouchableOpacity onPress={() => navigation.push('addorder', { blog_id : blog.id })} style={[ styles.Width_100, styles.marginVertical_5 ]}>
+                                            <TouchableOpacity onPress={() => navigation.push('addlocation', { blog_id : blog.id })} style={[ styles.Width_100, styles.marginVertical_5 ]}>
                                                 <View style={[styles.bg_White, styles.Width_100, styles.Radius_15, styles.Border, styles.border_dash, styles.overHidden, styles.paddingHorizontal_10, styles.paddingVertical_10, styles.flexCenter ]}>
                                                     <View style={[ styles.overHidden , styles.position_R, styles.height_150, styles.Width_100]}>
                                                         <Image
@@ -88,6 +135,19 @@ function Home({navigation}) {
                         )
                     }
                 </View>
+
+                {
+                    blog.length === 0 ?
+                        <View style={[ styles.flexCenter, styles.height_full ]}>
+                            <Image
+                                style={[styles.width_150, styles.height_150 ]}
+                                source={require('../../assets/image/no_data.png')}
+                                resizeMode='contain'
+                            />
+                        </View>
+                        :
+                        <View/>
+                }
 
             </Content>
         </Container>

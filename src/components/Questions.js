@@ -50,7 +50,7 @@ function Questions({navigation}) {
 
             <Content contentContainerStyle={[ styles.bgFullWidth, styles.position_R ]}>
 
-                <View style={[ styles.position_A, styles.top_0, styles.right_0, styles.Width_100, ]}>
+                <View style={[ styles.position_A, styles.right_0, styles.Width_100, { top : -15 } ]}>
                     <Image
                         style={[styles.Width_100, { height : 190 }]}
                         source={require('../../assets/image/bg5.png')}

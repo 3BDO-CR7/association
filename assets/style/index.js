@@ -426,6 +426,9 @@ const styles = ({
     overlay_white : {
         backgroundColor                 : "rgba(255, 255, 255, 0.5)"
     },
+    overlay_white_up : {
+        backgroundColor                 : "rgba(255, 255, 255, 0.9)"
+    },
     overlay_black : {
         backgroundColor                 : "rgba(0, 0, 0, 0.3)"
     },

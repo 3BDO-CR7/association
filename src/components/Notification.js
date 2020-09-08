@@ -1,5 +1,5 @@
 import React, { useState , useEffect } from "react";
-import {View, Text, Image} from "react-native";
+import {View, Text, Image, AsyncStorage} from "react-native";
 import {Container, Content, Header, Button, Left, Body, Title} from 'native-base'
 import styles from '../../assets/style';
 import i18n from "../../locale/i18n";
@@ -7,26 +7,48 @@ import * as Animatable from 'react-native-animatable';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { allNotifications } from '../actions';
+import * as Permissions from "expo-permissions";
+import {Notifications} from "expo";
 
 function Notification({navigation}) {
 
     const lang                          = useSelector(state => state.lang.lang);
-    const [deviceId, setDeviceId]       = useState(1);
+    // const [DeviceId, setDeviceId]       = useState('');
     const notifications                 = useSelector(state => state.article.notifications ? state.article.notifications : []);
     const dispatch                      = useDispatch();
 
-    function fetchData(){
-        dispatch(allNotifications(lang, deviceId));
-    }
+    const getDeviceId = async () => {
+        const {status: existingStatus} = await Permissions.getAsync(
+            Permissions.NOTIFICATIONS
+        );
+
+        let finalStatus = existingStatus;
+
+        if (existingStatus !== 'granted') {
+            const {status} = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+            finalStatus = status;
+        }
+
+        if (finalStatus !== 'granted') {
+            return;
+        }
+
+        const deviceId = await Notifications.getExpoPushTokenAsync();
+
+        // setDeviceId(deviceId);
+
+        setTimeout(() => {
+            dispatch(allNotifications(lang, deviceId));
+        }, 2000);
+
+        console.log('deviceId -=-=-=-=-=-=-', deviceId)
+        AsyncStorage.setItem('deviceID', deviceId);
+    };
 
     useEffect(() => {
-        fetchData();
-        const unsubscribe = navigation.addListener('focus', () => {
-            fetchData();
-        });
+        getDeviceId();
+    }, []);
 
-        return unsubscribe;
-    }, [navigation]);
 
     return (
         <Container>
@@ -49,7 +71,7 @@ function Notification({navigation}) {
 
             <Content contentContainerStyle={[ styles.bgFullWidth, styles.position_R ]}>
 
-                <View style={[ styles.position_A, styles.top_0, styles.right_0, styles.Width_100, ]}>
+                <View style={[ styles.position_A, styles.right_0, styles.Width_100, { top : -15 } ]}>
                     <Image
                         style={[styles.Width_100, { height : 190 }]}
                         source={require('../../assets/image/bg5.png')}
@@ -82,6 +104,19 @@ function Notification({navigation}) {
                                 )
                             }
                         )
+                    }
+
+                    {
+                        notifications.length === 0 ?
+                            <View style={[ styles.flexCenter, styles.height_full ]}>
+                                <Image
+                                    style={[styles.width_150, styles.height_150 ]}
+                                    source={require('../../assets/image/no_data.png')}
+                                    resizeMode='contain'
+                                />
+                            </View>
+                            :
+                            <View/>
                     }
 
                 </View>

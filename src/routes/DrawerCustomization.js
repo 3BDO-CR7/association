@@ -33,9 +33,9 @@ function CustomDrawerContent(props) {
     return (
         <DrawerContentScrollView {...props} style={[styles.bg_White, styles.bgFullWidth]}>
 
-            <View style={[ styles.bg_off, styles.position_A, styles.Width_100, styles.height_100 ,{ top: 0 } ]}/>
+            {/*<View style={[ styles.position_A, styles.Width_100, styles.height_50 ,{ top: 0, backgroundColor : '#e7efea' } ]}/>*/}
 
-            <View style={[ styles.rowGroup, styles.paddingVertical_15, styles.paddingHorizontal_15, styles.top_25 ]}>
+            <View style={[ styles.rowGroup, styles.paddingVertical_15, styles.paddingHorizontal_15, styles.top_25, styles.position_R, { zIndex : 99 } ]}>
                 <Text style={[ styles.textSize_18, styles.FairuzNormal ]}>
                     { i18n.t('menu') }
                 </Text>
@@ -50,15 +50,15 @@ function CustomDrawerContent(props) {
 
             <View style={[ styles.position_R, ]}>
 
-                <View style={[ styles.position_R, styles.right_0, styles.Width_100, { top : -13 } ]}>
+                <View style={[ styles.position_R, styles.right_0, styles.Width_100, { top : -130 } ]}>
                     <Image
-                        style={[styles.Width_100, { height : 190 }]}
-                        source={require('../../assets/image/bg5.png')}
+                        style={[styles.Width_100, { height : 280 }]}
+                        source={require('../../assets/image/bg.png')}
                         resizeMode='contain'
                     />
                 </View>
 
-                <View style={[ styles.paddingHorizontal_10, styles.paddingVertical_10, styles.position_R ]}>
+                <View style={[ styles.paddingHorizontal_10, styles.paddingVertical_10, styles.position_R, { top : -80 } ]}>
 
                     <TouchableOpacity
                         onPress={() => props.navigation.navigate('commonStack', {screen: 'notification'})}

@@ -23,6 +23,9 @@ const ar = {
     'cam'                       : 'الكاميرا',
     'gall'                      : 'معرض الصور',
     'choose'                    : 'إختيار',
+    '_newNotification'          : 'يوجد اشعار جديد',
+    'newNotification'           : 'اشعار جديد',
+    'wait'                      : 'إنتظر قليلا',
 };
 
 export default ar;
