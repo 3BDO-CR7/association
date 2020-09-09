@@ -26,6 +26,8 @@ const en = {
     '_newNotification'          : 'there is a new notification',
     'newNotification'           : 'new notification',
     'wait'                      : 'please wait a little',
+    'photo'                     : 'you have uploaded 5 images as a maximum',
+    'dophoto'                   : 'Pictures have been uploaded',
 
 };
 

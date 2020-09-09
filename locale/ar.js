@@ -26,6 +26,8 @@ const ar = {
     '_newNotification'          : 'يوجد اشعار جديد',
     'newNotification'           : 'اشعار جديد',
     'wait'                      : 'إنتظر قليلا',
+    'photo'                     : 'لقد قمت برفع 5 صور كد آقصي',
+    'dophoto'                   : 'تم تحميل الصور',
 };
 
 export default ar;

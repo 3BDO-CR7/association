@@ -8,11 +8,12 @@ import {
     KeyboardAvoidingView,
     ScrollView,
     AsyncStorage,
-    ActivityIndicator
+    ActivityIndicator,Platform
 } from "react-native";
 import {Container, Content, Header, Button, Left, Body, Title, Toast, Form, Item, Input, Icon, CheckBox} from 'native-base'
 import styles from '../../assets/style';
 import i18n from "../../locale/i18n";
+import * as FileSystem from 'expo-file-system';
 import { useSelector, useDispatch } from 'react-redux';
 import DateTimePicker from "react-native-modal-datetime-picker";
 import Modal from "react-native-modal";
@@ -23,6 +24,8 @@ import { getBlogs, addOrder } from '../actions';
 import * as Permissions from "expo-permissions";
 import {Notifications} from "expo";
 
+let    data = new FormData();
+
 function AddOrder({navigation, route}) {
 
     const lang                                          = useSelector(state => state.lang.lang);
@@ -32,7 +35,7 @@ function AddOrder({navigation, route}) {
     const [cityName , setCityName]                      = useState(route.params.cityName);
     const [loaded, setLoaded]                           = useState(false);
     const [deviceId, setDeviceId]                       = useState('');
-    const [deviceType, setDeviceType]                   = useState('android');
+    const [deviceType, setDeviceType]                   = useState(Platform.OS === 'ios' ? 'ios' : 'android');
     const dispatch                                      = useDispatch();
     const blogs                                         = useSelector(state => state.blog.blog);
 
@@ -61,7 +64,6 @@ function AddOrder({navigation, route}) {
 
     const [base64, setBase64]                           = useState([]);
     const [images, setImages]                           = useState([]);
-    const [base_64, setBase_64]                         = useState([]);
 
     function fetchData(){
         dispatch(getBlogs(lang));
@@ -255,7 +257,22 @@ function AddOrder({navigation, route}) {
 
     const uploadImages = async (i) => {
 
-        if (i === 0) {
+        if(images.length >= 5){
+
+            setShowModalUpload(!showModalUpload);
+
+            Toast.show({
+                text        	: i18n.t('photo'),
+                type			: "danger",
+                duration    	: 3000,
+                textStyle   	: {
+                    color       	: "white",
+                    fontFamily  	: 'FairuzBlack',
+                    textAlign   	: 'center'
+                }
+            });
+
+        }else if (i === 0) {
 
             let result = await ImagePicker.launchCameraAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -267,6 +284,7 @@ function AddOrder({navigation, route}) {
                 setShowModalUpload(!showModalUpload);
                 setBase64(base64.concat(result.uri));
                 setImages(images.concat(result.base64));
+                console.log('base64', base64);
                 data.append("images[]",{
                     uri : result.uri,
                     type : 'image/jpeg',
@@ -285,29 +303,21 @@ function AddOrder({navigation, route}) {
     const imageBrowserCallback = (callback) => {
 
         callback.then((photos) => {
-                photos.map((item,index) => {
-                    data.append("images[]",{
-                        uri     : item.localUri,
-                        type    : 'image/jpeg',
-                        name    : item.filename || `temp_image_${index}.jpg`
-                    });
-                });
-                setShowModalUpload(!showModalUpload);
-                setImageBrowserOpen(false);
-                setCameraBrowserOpen(false);
-                console.log('images -=-=-=-=-', images);
-                setImages(images.concat(images));
-                const imgs = images;
-                if (imgs.length !== 0){
-                    for (let i = 0; i < imgs.length; i++) {
-                        const imageURL = imgs[i].localUri;
-                        FileSystem.readAsStringAsync(imageURL, { encoding: 'base64' }).then(imgBase64 => setBase_64.push(imgBase64))
-                    }
-                } else {
-                    console.log('no images')
-                }
+
+            setShowModalUpload(!showModalUpload);
+            setImageBrowserOpen(false);
+            setCameraBrowserOpen(false);
+
+            let arrImage = [];
+            const imgs = photos;
+            for (let i = 0; i < imgs.length; i++) {
+                const imageURL = imgs[i].localUri;
+                arrImage.push(imageURL);
+                setBase64(base64.concat(arrImage));
+                FileSystem.readAsStringAsync(imageURL, { encoding: 'base64' }).then(imgBase64 => images.push(imgBase64));
             }
-        ).catch((e) => console.log(e))
+
+        }).catch((e) => console.log(e))
     };
 
     function deleteImg(i) {
@@ -345,7 +355,9 @@ function AddOrder({navigation, route}) {
     }
 
     if (imageBrowserOpen) {
-        return(<ImageBrowser base64={true} max={5} callback={imageBrowserCallback}/>);
+        return(<ImageBrowser base64={true} max={(images.length >= 4) ? 1 : 5} callback={imageBrowserCallback}/>);
+    }else if (cameraBrowserOpen) {
+        return(<CameraBrowser base64={true} max={(images.length >= 4) ? 1 : 5} callback={imageBrowserCallback}/>);
     }
 
     return (
@@ -502,11 +514,16 @@ function AddOrder({navigation, route}) {
                             </Modal>
 
                             <View style={[styles.overHidden, styles.rowGroup, styles.marginTop_20]}>
-                                <TouchableOpacity onPress={() => toggleModal('upload')} style={[ styles.Width_100, styles.height_60, styles.Radius_15 , styles.paddingHorizontal_20, styles.paddingVertical_15 , styles.rowGroup, styles.Border ,(productId !== null ? styles.border_green :  styles.border_light_gray )]}>
-                                    <Text style={[styles.FairuzBlack, styles.textSize_14, (productId !== null ? styles.text_green : styles.text_light_gray)]}>
-                                        {i18n.t('prodimage')}
+                                <TouchableOpacity onPress={() => toggleModal('upload')} style={[ styles.Width_100, styles.height_60, styles.Radius_15 , styles.paddingHorizontal_20, styles.paddingVertical_15 , styles.rowGroup, styles.Border ,(base64.length !== 0 ? styles.border_green :  styles.border_light_gray )]}>
+                                    <Text style={[styles.FairuzBlack, styles.textSize_14, (base64.length !== 0 ? styles.text_green : styles.text_light_gray)]}>
+                                        {
+                                            (base64.length !== 0) ?
+                                                i18n.t('dophoto')
+                                            :
+                                                i18n.t('prodimage')
+                                        }
                                     </Text>
-                                    <Icon style={[styles.textSize_20, (productId !== null ? styles.text_green : styles.text_light_gray)]} type="Fontisto" name='camera' />
+                                    <Icon style={[styles.textSize_20, (base64.length !== 0 ? styles.text_green : styles.text_light_gray)]} type="Fontisto" name='camera' />
                                 </TouchableOpacity>
                             </View>
 
@@ -541,7 +558,7 @@ function AddOrder({navigation, route}) {
                                 {
                                     base64.map((item,i) => {
                                         return(
-                                            <View key={i} style={[ styles.width_70, styles.height_70, styles.marginVertical_10, styles.marginHorizontal_10, styles.Radius_10 ]}>
+                                            <View key={i} style={[ styles.width_70, styles.height_70, styles.marginVertical_10, styles.marginHorizontal_10, styles.Radius_10, styles.overHidden ]}>
                                                 <Image
                                                     style={[ styles.Width_100, styles.height_full ]}
                                                     source={{uri: item}}

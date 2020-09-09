@@ -18,9 +18,7 @@ export const addOrder = (data, navigation) => {
             device_type     : data.deviceType,
         }).then( (response)=> {
 
-            if (response.data.success === true) {
-                navigation.navigate('home');
-            }
+            navigation.navigate('home');
 
             Toast.show({
                 text        	: response.data.message,
