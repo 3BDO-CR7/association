@@ -1,5 +1,5 @@
 import React , {useState , useEffect} from 'react';
-import {AsyncStorage, View , Platform} from 'react-native';
+import {AsyncStorage, View , Platform , } from 'react-native';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './src/routes';
@@ -10,14 +10,13 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistedStore } from './src/store';
 import './ReactotronConfig';
 import * as Permissions from "expo-permissions";
-import { Notifications, AppLoading } from 'expo'
+import { Notifications, AppLoading } from 'expo';
 
 function App({navigation}) {
 
   const [isReady, setIsReady] = useState(false);
 
   useEffect( () => {
-
     // I18nManager.forceRTL(true);
     // AsyncStorage.clear()
 
@@ -58,5 +57,6 @@ function App({navigation}) {
       </Provider>
   );
 }
+
 
 export default App;
