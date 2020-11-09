@@ -94,7 +94,13 @@ function AddOrder({navigation, route}) {
     };
 
     useEffect(() => {
-        getDeviceId()
+        getDeviceId();
+        const Today     = new Date();
+        const dd        = String(Today.getDate()).padStart(2, '0');
+        const mm        = String(Today.getMonth() + 1).padStart(2, '0');
+        const yyyy      = Today.getFullYear();
+        const newDate   = mm + '/' + dd + '/' + yyyy;
+        setDate(newDate)
     }, []);
 
     useEffect(() => {
@@ -284,7 +290,6 @@ function AddOrder({navigation, route}) {
                 setShowModalUpload(!showModalUpload);
                 setBase64(base64.concat(result.uri));
                 setImages(images.concat(result.base64));
-                console.log('base64', base64);
                 data.append("images[]",{
                     uri : result.uri,
                     type : 'image/jpeg',
@@ -325,18 +330,16 @@ function AddOrder({navigation, route}) {
         images.splice(i, 1);
         setBase64([...base64]);
         setImages([...images]);
-        console.log('base64 delet', base64.length);
-        console.log('images delet', images.length);
     }
 
     function onSubmit(){
         const err = validate();
-
+        // const data = { lang, name, phone, date, time, productId, lat, lng, deviceId, images, deviceType };
+        // console.log('data -=-=-=-=-=-', data);
         if (!err){
             setLoaded(true);
             const data = { lang, name, phone, date, time, productId, lat, lng, deviceId, images, deviceType };
             dispatch(addOrder(data, navigation, loaded));
-            console.log('data -=-=-=-=-=-', data)
         }
 
     }
@@ -461,6 +464,7 @@ function AddOrder({navigation, route}) {
                                 onCancel        = {toggleTimePicker}
                                 mode            = {'time'}
                                 is24Hour        = {true}
+                                value           = { date }
                                 minimumDate     = {new Date()}
                             />
 

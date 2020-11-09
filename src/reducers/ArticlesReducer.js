@@ -1,4 +1,4 @@
-const INITIAL_STATE = { about : '', terms : '', data : [] , notifications : [], loader : false };
+const INITIAL_STATE = { about : '', terms : '', data : [], notifications : [], social : null, loader : false };
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
@@ -21,6 +21,10 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 notifications           : action.payload.data,
                 loader                  : action.payload.success
+            };
+        case 'social':
+            return {
+                social                  : action.payload.data,
             };
         default:
             return state;

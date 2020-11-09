@@ -58,3 +58,17 @@ export const allNotifications = ( lang, deviceId) => {
         });
     }
 };
+
+export const social = ( lang ) => {
+    return (dispatch) => {
+        axios.post(`${CONST.url}socials`, {
+            lang                : lang,
+        }).then( (response)=> {
+
+            dispatch({type: 'social', payload: response.data});
+
+        }).catch(err => {
+            console.log('err', err);
+        });
+    }
+};

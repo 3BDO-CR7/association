@@ -121,6 +121,7 @@ function AddLocation({navigation, route}) {
                             <MapView
                                 ref={mapRef}
                                 style={{width: '100%', height: '100%', flex: 1}}
+                                mapType={'satellite'}
                                 initialRegion={mapRegion}>
                                 <MapView.Marker
                                     draggable

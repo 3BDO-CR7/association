@@ -6,6 +6,7 @@ import {createDrawerNavigator, DrawerContentScrollView, DrawerItem,} from '@reac
 import styles from '../../assets/style';
 import {useDispatch, useSelector} from "react-redux";
 import i18n from "../../locale/i18n";
+import { social } from '../actions';
 
 
 import Home                     from "../components/Home";
@@ -24,11 +25,15 @@ const CommonStack       = createStackNavigator();
 const Drawer            = createDrawerNavigator();
 
 
-function CustomDrawerContent(props) {
+function CustomDrawerContent({props, navigation}) {
 
-    const lang      = useSelector(state => state.lang.lang);
+    const lang              = useSelector(state => state.lang.lang);
+    const allSocial         = useSelector(state => state.article.social ? state.article.social : null);
+    const dispatch          = useDispatch();
 
-    const dispatch  = useDispatch();
+    useEffect(() => {
+        dispatch(social(lang));
+    });
 
     return (
         <DrawerContentScrollView {...props} style={[styles.bg_White, styles.bgFullWidth]}>
@@ -39,7 +44,7 @@ function CustomDrawerContent(props) {
                 <Text style={[ styles.textSize_18, styles.FairuzNormal ]}>
                     { i18n.t('menu') }
                 </Text>
-                <TouchableOpacity onPress={() => props.navigation.closeDrawer()}>
+                <TouchableOpacity onPress={() => navigation.closeDrawer()}>
                     <Image
                         style={[styles.width_20, styles.height_20]}
                         source={require('../../assets/image/close.png')}
@@ -149,6 +154,65 @@ function CustomDrawerContent(props) {
                     </TouchableOpacity>
 
                 </View>
+
+            </View>
+
+            <View style={[ styles.rowCenter, styles.marginVertical_10 ]}>
+
+                {
+                    allSocial.facebook !== '' ?
+                        <TouchableOpacity
+                            onPress={() => {Linking.openURL( allSocial.facebook )}}
+                            style={[ styles.width_50, styles.height_50,styles.marginVertical_10, styles.Radius_50 , styles.flexCenter, styles.marginHorizontal_5,{ backgroundColor : '#3b5999' } ]}>
+                            <Icon style={[styles.textSize_22, styles.text_White]} type="Fontisto" name='facebook' />
+                        </TouchableOpacity>
+                        :
+                        <View/>
+                }
+
+                {
+                    allSocial.twitter !== '' ?
+                        <TouchableOpacity
+                            onPress={() => {Linking.openURL( allSocial.twitter )}}
+                            style={[ styles.width_50, styles.height_50,styles.marginVertical_10, styles.Radius_60 , styles.flexCenter, styles.marginHorizontal_5,{ backgroundColor : '#55acee' } ]}>
+                            <Icon style={[styles.textSize_22, styles.text_White]} type="AntDesign" name='twitter' />
+                        </TouchableOpacity>
+                        :
+                        <View/>
+                }
+
+                {
+                    allSocial.instgeram !== '' ?
+                        <TouchableOpacity
+                            onPress={() => {Linking.openURL( allSocial.instgeram )}}
+                            style={[ styles.width_50, styles.height_50,styles.marginVertical_10, styles.Radius_60 , styles.flexCenter, styles.marginHorizontal_5,{ backgroundColor : '#e4405f' } ]}>
+                            <Icon style={[styles.textSize_22, styles.text_White]} type="AntDesign" name='instagram' />
+                        </TouchableOpacity>
+                        :
+                        <View/>
+                }
+
+                {
+                    allSocial.phone !== '' ?
+                        <TouchableOpacity
+                            onPress={() => {Linking.openURL('tel://' + allSocial.phone )}}
+                            style={[ styles.width_50, styles.height_50,styles.marginVertical_10, styles.Radius_60 , styles.flexCenter, styles.marginHorizontal_5,{ backgroundColor : '#0084ff' } ]}>
+                            <Icon style={[styles.textSize_22, styles.text_White]} type="Feather" name='phone-call' />
+                        </TouchableOpacity>
+                        :
+                        <View/>
+                }
+
+                {
+                    allSocial.whatsapp !== '' ?
+                        <TouchableOpacity
+                            onPress={() => {Linking.openURL('http://api.whatsapp.com/send?phone=' + allSocial.whatsapp )}}
+                            style={[ styles.width_50, styles.height_50,styles.marginVertical_10, styles.Radius_60 , styles.flexCenter, styles.marginHorizontal_5,{ backgroundColor : '#25D366' } ]}>
+                            <Icon style={[styles.textSize_22, styles.text_White]} type="FontAwesome" name='whatsapp' />
+                        </TouchableOpacity>
+                        :
+                        <View/>
+                }
 
             </View>
 
