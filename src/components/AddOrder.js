@@ -195,10 +195,11 @@ function AddOrder({navigation, route}) {
         }else if (productId === null) {
             isError     = true;
             msg         = i18n.t('product');
-        }else if(images.length <= 0){
-            isError     = true;
-            msg         = i18n.t('prodimage');
         }
+        // else if(images.length <= 0){
+        //     isError     = true;
+        //     msg         = i18n.t('prodimage');
+        // }
         if (msg !== '') {
             Toast.show({
                 text        : msg,

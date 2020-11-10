@@ -31,9 +31,13 @@ function CustomDrawerContent({props, navigation}) {
     const allSocial         = useSelector(state => state.article.social ? state.article.social : null);
     const dispatch          = useDispatch();
 
-    useEffect(() => {
+    function callFun(){
         dispatch(social(lang));
-    });
+    }
+
+    useEffect(() => {
+        callFun();
+    }, []);
 
     return (
         <DrawerContentScrollView {...props} style={[styles.bg_White, styles.bgFullWidth]}>
